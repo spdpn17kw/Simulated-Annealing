@@ -202,6 +202,53 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
 		//cout << T << " ";
 	}
 }
+//modyikacja ktora rozwaza jedynie wieksze lub mniejsze C_max od C_max_prim
+void wyzarzanie_cmax_rozne(vector<vector<Task>> macierz, vector<int> & order) {
+	double T = 1000000000;
+	double Tk = 0.0001;
+	int zad = 0;
+	int zad1 = 0;
+	int c = 0;
+	int c_prim = 0;
+	double P = 0;
+	double u = 0.75;
+	double zmienna;
+	srand(time(NULL));
+
+	while (T > Tk) {
+		zad = rand() % order.size();
+		zad1 = rand() % order.size();
+		//cout << zad1;
+
+		while (zad == zad1)
+		{
+			zad = rand() % order.size();
+			zad1 = rand() % order.size();
+		}
+
+		c = cmax(macierz, order);
+		swap(order[zad], order[zad1]);
+		c_prim = cmax(macierz, order);
+
+		if (c < c_prim) {
+			P = 1;
+		}// zmiana c != C_prim
+		else if (c > c_prim) {
+			P = exp((c - c_prim) / T);
+		}
+
+		zmienna = static_cast<double>(rand() % 10000) / 10000;
+		//cout << zmienna<<" ";
+		if (P >= zmienna) {
+			T = u * T;
+		}
+		else {
+			swap(order[zad], order[zad1]);
+			T = u * T;
+		}
+		//cout << T << " ";
+	}
+}
 // modyfikacja dla pominięcia prawdopodobienstwa rownego 1 
 void wyzarzanie_prawdopodobienstwo(vector<vector<Task>> macierz, vector<int> & order) {
 	double T = 1000000000;
@@ -444,9 +491,7 @@ int main()
 	char znak=0; 
 	char znak1=0;
 	
-	//cout << "u - wybor progu"<<endl;
-	//cout << " i - insert wersja"<<endl;
-	//cout << "q - zakoncz"<<endl;
+	
 	while (znak != 'q' ) {
 		cout << "u - wspolczynnik chlodzenia" << endl;
 		cout << " i - insert wersja" << endl;
@@ -454,6 +499,7 @@ int main()
 		cout << "t - ustaw temperature poczatkowa i koncowa"<<endl;
 		cout << "n - zacznij od ustawienia zadanian w wyniku sortowania algorytmem NEH" << endl;
 		cout << "p - wyzarzanie gdzie pomijamy prawdopodobienstwo rowne 1 " << endl; 
+		cout << "c - c_maxy rozne od c_max_prim" << endl;
 
 
 		cin >> znak;
@@ -544,6 +590,14 @@ int main()
 		case 'p':
 			start = std::chrono::system_clock::now();
 			wyzarzanie_prawdopodobienstwo(macierz, order);
+			end = std::chrono::system_clock::now();
+			elapsed_seconds = end - start;
+			cout << "czas trwania: " << elapsed_seconds.count() << "s\n";
+			cout << "cmax: " << cmax(macierz, order) << endl;
+			break;
+		case 'c':
+			start = std::chrono::system_clock::now();
+			wyzarzanie_cmax_rozne(macierz, order);
 			end = std::chrono::system_clock::now();
 			elapsed_seconds = end - start;
 			cout << "czas trwania: " << elapsed_seconds.count() << "s\n";
