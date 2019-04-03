@@ -453,7 +453,7 @@ int main()
 		cout << "q - zakoncz" << endl;
 		cout << "t - ustaw temperature poczatkowa i koncowa"<<endl;
 		cout << "n - zacznij od ustawienia zadanian w wyniku sortowania algorytmem NEH" << endl;
-		cout << "p - wyzarzanie gdzie pomijamy prawdopodobienstwo rowne 1 "
+		cout << "p - wyzarzanie gdzie pomijamy prawdopodobienstwo rowne 1 " << endl; 
 
 
 		cin >> znak;
@@ -549,6 +549,7 @@ int main()
 			cout << "czas trwania: " << elapsed_seconds.count() << "s\n";
 			cout << "cmax: " << cmax(macierz, order) << endl;
 			break;
+
 		default:
 			break;
 		}
