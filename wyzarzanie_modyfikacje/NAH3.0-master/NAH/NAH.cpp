@@ -154,7 +154,7 @@ vector<int> sort_cmax(vector<vector<Task>> macierz, vector<int> order) {
 
 
 
-
+//podstawowe wyzarzanie na 3.0 
 
 void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
 	double T=1000000000;
@@ -202,7 +202,7 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
 	}
 }
 
-
+//modyfikacja do badania wspólczynnika u 
 void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order,double u) {
 	double T = 1000000000;
 	int zad = 0;
@@ -249,6 +249,7 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order,double u) {
 	}
 }
 
+//modyfikacja do badania między swap a insert 
 void wyzarzanie_insert(vector<vector<Task>> macierz, vector<int> & order) {
 	double T = 1000000000;
 	int zad = 0;
@@ -309,7 +310,9 @@ void wyzarzanie_insert(vector<vector<Task>> macierz, vector<int> & order) {
 		//cout << T << " ";
 	}
 }
-void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order, double u,int T) {
+
+//modyfikacja do badania zależnosci miedzy doborem temp startowej  i koncowej i mozliwosc zmiany wspolczynnika u
+void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order, double u, double Tk, int T) {
 	//double T = 1000000000;
 	int zad = 0;
 	int zad1 = 0;
@@ -320,7 +323,7 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order, double u,int 
 	double zmienna;
 	srand(time(NULL));
 
-	while (T > 0.0001) {
+	while (T > Tk) {
 		zad = rand() % order.size();
 		zad1 = rand() % order.size();
 		//cout << zad1;
@@ -402,7 +405,7 @@ int main()
 		cout << "u - wspolczynnik chlodzenia" << endl;
 		cout << " i - insert wersja" << endl;
 		cout << "q - zakoncz" << endl;
-		cout << "t - ustaw temperature poczatkowa"<<endl;
+		cout << "t - ustaw temperature poczatkowa i koncowa"<<endl;
 		cout << "n - zacznij od ustawienia zadanian w wyniku sortowania algorytmem NEH" << endl;
 
 
@@ -464,10 +467,13 @@ int main()
 
 		case 't':
 			double T;
+			double Tk;
 			cout << "podaj temperature starową"<<endl;
 			cin >> T;
+			cout << "podaj temp koncowa" << endl; 
+			cin >> Tk; 
 			start = std::chrono::system_clock::now();
-			wyzarzanie(macierz, order, 0.8,T);
+			wyzarzanie(macierz, order, 0.8,T,Tk);
 			end = std::chrono::system_clock::now();
 			elapsed_seconds = end - start;
 			cout << "czas trwania: " << elapsed_seconds.count() << "s\n";
