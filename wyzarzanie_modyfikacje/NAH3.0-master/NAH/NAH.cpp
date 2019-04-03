@@ -281,7 +281,7 @@ void wyzarzanie_prawdopodobienstwo(vector<vector<Task>> macierz, vector<int> & o
 		if (c > c_prim) P = exp((c - c_prim) / T);
 		
 		zmienna = static_cast<double>(rand() % 10000) / 10000;
-		cout << zmienna<<" ";
+		// cout << zmienna<<" ";
 		if (P >= zmienna) {
 			T = u * T;
 		}
@@ -609,13 +609,13 @@ int main()
 		}
 			for (int i = 0; i < number_of_ex; i++) cout << "kolejnosc: " << order[i] << " " << endl;
 	}
-
+	cout << "Przewidywno cmax rowny 6632 wg NEH " << endl; 
 		 
     //cout << cmax(macierz, order);
 	//for (int i = 0; i < number_of_ex; i++) cout << "kolejnosc: " << order[i] << " " << endl;
 	//print_matrix_time(new_macierz);
 
-	
+
 	system("pause");
 	return 0;
 }
