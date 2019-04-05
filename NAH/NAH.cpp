@@ -154,6 +154,63 @@ vector<int> sort_cmax(vector<vector<Task>> macierz, vector<int> order) {
 
 
 
+//modyfikacja uwzgledniajaca zapamietanie najlepszego  rozwiazania 
+void wyzarzanie_mod(vector<vector<Task>> macierz, vector<int> & order) {
+	double T = 1000000000;
+	double Tk = 0.0001;
+	int zad = 0;
+	int zad1 = 0;
+	int c = 0;
+	int c_prim = 0;
+	int c_better = 0;
+	double P = 0;
+	double u = 0.90;
+	double zmienna;
+	srand(time(NULL));
+	vector<int> betterSolution = order;
+
+
+	while (T > Tk) {
+		zad = rand() % order.size();
+		zad1 = rand() % order.size();
+		//cout << zad1;
+
+		while (zad == zad1)
+		{
+			zad = rand() % order.size();
+			zad1 = rand() % order.size();
+		}
+
+		c = cmax(macierz, order);
+		swap(order[zad], order[zad1]);
+		c_prim = cmax(macierz, order);
+		c_better = cmax(macierz, betterSolution);
+
+		//zapamietanie lepszego rozwiązania
+		if (c_prim < c_better) betterSolution = order;
+
+		if (c < c_prim) {
+			P = 1;
+		}
+		else {
+			P = exp((c - c_prim) / T);
+		}
+
+		zmienna = static_cast<double>(rand() % 10000) / 10000;
+		//cout << zmienna<<" ";
+		if (P >= zmienna) {
+			T = u * T;
+		}
+		else {
+			swap(order[zad], order[zad1]);
+			T = u * T;
+		}
+		//cout << T << " ";
+	}
+	order = betterSolution; 
+}
+
+
 
 
 void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
@@ -211,14 +268,14 @@ int main()
 	chrono::time_point< std::chrono::system_clock> start = std::chrono::system_clock::now();
 	int number_of_ex, n_m;
 	vector<vector<Task>> macierz = read_data(number_of_ex, n_m);
-	vector<int> sum_time(number_of_ex);  //suma czasow wykonania danego zadania przez wszystkie maszyny
+	/*vector<int> sum_time(number_of_ex);  //suma czasow wykonania danego zadania przez wszystkie maszyny
 	for (int j = 0; j < number_of_ex; j++) {
 		for (int i = 0; i < n_m; i++) {
 			sum_time[j] += macierz[j][i].time;
 		}
 		//cout << "time: " << sum_time[j] << endl;
 	}
-
+	*/
 	vector<int> order;
 	for (int i = 0; i < number_of_ex; i++) {
 		order.push_back(i + 1);
@@ -238,7 +295,7 @@ int main()
 	//cout << "order_naj = " << order_naj[i] << endl;
 	//print_matrix_time(macierz);
 
-	wyzarzanie(macierz,order);
+	wyzarzanie_mod(macierz,order);
     cout << cmax(macierz, order) << endl;
 	cout << "kolejnosc: " << endl; 
 	for (int i = 0; i < number_of_ex; i++) cout << order[i] << " "; 
