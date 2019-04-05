@@ -295,7 +295,7 @@ int main()
 	//cout << "order_naj = " << order_naj[i] << endl;
 	//print_matrix_time(macierz);
 
-	wyzarzanie_mod(macierz,order);
+	wyzarzanie(macierz,order);
     cout << cmax(macierz, order) << endl;
 	cout << "kolejnosc: " << endl; 
 	for (int i = 0; i < number_of_ex; i++) cout << order[i] << " "; 
