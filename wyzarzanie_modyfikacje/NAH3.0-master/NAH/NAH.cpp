@@ -152,10 +152,62 @@ vector<int> sort_cmax(vector<vector<Task>> macierz, vector<int> order) {
 	return order_pom;
 }
 
+//modyfikacja uwzgledniajaca zapamietanie najlepszego  rozwiazania 
+void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
+	double T = 1000000000;
+	double Tk = 0.0001;
+	int zad = 0;
+	int zad1 = 0;
+	int c = 0;
+	int c_prim = 0;
+	int c_better = 0;
+	double P = 0;
+	double u = 0.75;
+	double zmienna;
+	srand(time(NULL));
+	vector<int> betterSolution = order;
+	
 
+	while (T > Tk) {
+		zad = rand() % order.size();
+		zad1 = rand() % order.size();
+		//cout << zad1;
+
+		while (zad == zad1)
+		{
+			zad = rand() % order.size();
+			zad1 = rand() % order.size();
+		}
+
+		c = cmax(macierz, order);
+		swap(order[zad], order[zad1]);
+		c_prim = cmax(macierz, order);
+		c_better = cmax(macierz, betterSolution); 
+
+		//zapamietanie lepszego rozwiązania
+		if (c_prim < c_better) betterSolution = order; 
+
+		if (c < c_prim) {
+			P = 1;
+		}
+		else {
+			P = exp((c - c_prim) / T);
+		}
+
+		zmienna = static_cast<double>(rand() % 10000) / 10000;
+		//cout << zmienna<<" ";
+		if (P >= zmienna) {
+			T = u * T;
+		}
+		else {
+			swap(order[zad], order[zad1]);
+			T = u * T;
+		}
+		//cout << T << " ";
+	}
+}
 
 //podstawowe wyzarzanie na 3.0 
-
 void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
 	double T=1000000000;
 	double Tk = 0.0001;
@@ -202,6 +254,7 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
 		//cout << T << " ";
 	}
 }
+
 //modyikacja ktora rozwaza jedynie wieksze lub mniejsze C_max od C_max_prim
 void wyzarzanie_cmax_rozne(vector<vector<Task>> macierz, vector<int> & order) {
 	double T = 1000000000;
@@ -249,6 +302,7 @@ void wyzarzanie_cmax_rozne(vector<vector<Task>> macierz, vector<int> & order) {
 		//cout << T << " ";
 	}
 }
+
 // modyfikacja dla pominięcia prawdopodobienstwa rownego 1 
 void wyzarzanie_prawdopodobienstwo(vector<vector<Task>> macierz, vector<int> & order) {
 	double T = 1000000000;
@@ -292,7 +346,6 @@ void wyzarzanie_prawdopodobienstwo(vector<vector<Task>> macierz, vector<int> & o
 		//cout << T << " ";
 	}
 }
-
 
 //modyfikacja do badania wspólczynnika u 
 void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order,double u) {
