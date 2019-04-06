@@ -152,60 +152,6 @@ vector<int> sort_cmax(vector<vector<Task>> macierz, vector<int> order) {
 	return order_pom;
 }
 
-//modyfikacja uwzgledniajaca zapamietanie najlepszego  rozwiazania 
-void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
-	double T = 1000000000;
-	double Tk = 0.0001;
-	int zad = 0;
-	int zad1 = 0;
-	int c = 0;
-	int c_prim = 0;
-	int c_better = 0;
-	double P = 0;
-	double u = 0.75;
-	double zmienna;
-	srand(time(NULL));
-	vector<int> betterSolution = order;
-	
-
-	while (T > Tk) {
-		zad = rand() % order.size();
-		zad1 = rand() % order.size();
-		//cout << zad1;
-
-		while (zad == zad1)
-		{
-			zad = rand() % order.size();
-			zad1 = rand() % order.size();
-		}
-
-		c = cmax(macierz, order);
-		swap(order[zad], order[zad1]);
-		c_prim = cmax(macierz, order);
-		c_better = cmax(macierz, betterSolution); 
-
-		//zapamietanie lepszego rozwiązania
-		if (c_prim < c_better) betterSolution = order; 
-
-		if (c < c_prim) {
-			P = 1;
-		}
-		else {
-			P = exp((c - c_prim) / T);
-		}
-
-		zmienna = static_cast<double>(rand() % 10000) / 10000;
-		//cout << zmienna<<" ";
-		if (P >= zmienna) {
-			T = u * T;
-		}
-		else {
-			swap(order[zad], order[zad1]);
-			T = u * T;
-		}
-		//cout << T << " ";
-	}
-}
 
 //podstawowe wyzarzanie na 3.0 
 void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
@@ -504,6 +450,8 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order, double u, dou
 	}
 }
 
+
+
 int main()
 {
 
@@ -511,20 +459,13 @@ int main()
 	int number_of_ex, n_m;
 	vector<vector<Task>> macierz = read_data(number_of_ex, n_m);
 	vector<int> sum_time(number_of_ex);  //suma czasow wykonania danego zadania przez wszystkie maszyny
-	for (int j = 0; j < number_of_ex; j++) {
-		for (int i = 0; i < n_m; i++) {
-			sum_time[j] += macierz[j][i].time;
-		}
-		//cout << "time: " << sum_time[j] << endl;
-	}
-
 	vector<int> order;
 	for (int i = 0; i < number_of_ex; i++) {
 		order.push_back(i + 1);
 	}
 	
 	//vector<int> order;
-	vector<int> order1 = sort(sum_time);
+	//vector<int> order1 = sort(sum_time);
  //for (int i = 0; i < order.size(); i++)
 	//cout << "czas od max do min = " << order[i] << endl;
 	//vector<int> order1 = { 3,1,2 };
@@ -631,7 +572,14 @@ int main()
 			//vector<int> order_naj = sort_cmax(macierz, order);
 			order = order_naj;
 			start = std::chrono::system_clock::now();
-			
+		
+			for (int j = 0; j < number_of_ex; j++) {
+				for (int i = 0; i < n_m; i++) {
+					sum_time[j] += macierz[j][i].time;
+				}
+				//cout << "time: " << sum_time[j] << endl;
+			};
+
 			wyzarzanie(macierz, order, 0.8);
 			end = std::chrono::system_clock::now();
 			chrono::duration<double> elapsed_seconds = end - start;

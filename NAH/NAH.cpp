@@ -152,7 +152,52 @@ vector<int> sort_cmax(vector<vector<Task>> macierz, vector<int> order) {
 	return order_pom;
 }
 
+void wyzarzanie_cmax_rozne(vector<vector<Task>> macierz, vector<int> & order) {
+	double T = 1000000000;
+	double Tk = 0.0001;
+	int zad = 0;
+	int zad1 = 0;
+	int c = 0;
+	int c_prim = 0;
+	double P = 0;
+	double u = 0.75;
+	double zmienna;
+	srand(time(NULL));
 
+	while (T > Tk) {
+		zad = rand() % order.size();
+		zad1 = rand() % order.size();
+		//cout << zad1;
+
+		while (zad == zad1)
+		{
+			zad = rand() % order.size();
+			zad1 = rand() % order.size();
+		}
+
+		c = cmax(macierz, order);
+		swap(order[zad], order[zad1]);
+		c_prim = cmax(macierz, order);
+
+		if (c < c_prim) {
+			P = 1;
+		}// zmiana c != C_prim
+		else if (c > c_prim) {
+			P = exp((c - c_prim) / T);
+		}
+
+		zmienna = static_cast<double>(rand() % 10000) / 10000;
+		//cout << zmienna<<" ";
+		if (P >= zmienna) {
+			T = u * T;
+		}
+		else {
+			swap(order[zad], order[zad1]);
+			T = u * T;
+		}
+		//cout << T << " ";
+	}
+}
 
 //modyfikacja uwzgledniajaca zapamietanie najlepszego  rozwiazania 
 void wyzarzanie_mod(vector<vector<Task>> macierz, vector<int> & order) {
@@ -164,7 +209,7 @@ void wyzarzanie_mod(vector<vector<Task>> macierz, vector<int> & order) {
 	int c_prim = 0;
 	int c_better = 0;
 	double P = 0;
-	double u = 0.90;
+	double u = 0.75;
 	double zmienna;
 	srand(time(NULL));
 	vector<int> betterSolution = order;
@@ -210,6 +255,54 @@ void wyzarzanie_mod(vector<vector<Task>> macierz, vector<int> & order) {
 	order = betterSolution; 
 }
 
+
+//modyfikacja do badania wspólczynnika u 
+void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order, double u) {
+	double T = 1000000000;
+	double Tk = 0.0001;
+	int zad = 0;
+	int zad1 = 0;
+	int c = 0;
+	int c_prim = 0;
+	double P = 0;
+	//double u = 0.75;
+	double zmienna;
+	srand(time(NULL));
+
+	while (T > Tk) {
+		zad = rand() % order.size();
+		zad1 = rand() % order.size();
+		//cout << zad1;
+
+		while (zad == zad1)
+		{
+			zad = rand() % order.size();
+			zad1 = rand() % order.size();
+		}
+
+		c = cmax(macierz, order);
+		swap(order[zad], order[zad1]);
+		c_prim = cmax(macierz, order);
+
+		if (c < c_prim) {
+			P = 1;
+		}
+		else {
+			P = exp((c - c_prim) / T);
+		}
+
+		zmienna = static_cast<double>(rand() % 10000) / 10000;
+		//cout << zmienna<<" ";
+		if (P >= zmienna) {
+			T = u * T;
+		}
+		else {
+			swap(order[zad], order[zad1]);
+			T = u * T;
+		}
+		//cout << T << " ";
+	}
+}
 
 
 
@@ -260,50 +353,205 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
 }
 
 
+void wyzarzanie_insert(vector<vector<Task>> macierz, vector<int> & order) {
+	double T = 1000000000;
+	int zad = 0;
+	int zad1 = 0;
+	int c = 0;
+	int c_prim = 0;
+	double P = 0;
+	double u = 0.75;
+	double zmienna;
+	srand(time(NULL));
+
+	while (T > 0.0001) {
+		zad = rand() % order.size();
+		zad1 = rand() % order.size();
+		//cout << zad1;
+
+		while (zad == zad1)
+		{
+			zad = rand() % order.size();
+			zad1 = rand() % order.size();
+		}
+
+		c = cmax(macierz, order);
+		//swap(order[zad], order[zad1]);
+		order.insert(order.begin() + zad, order[zad1]);
+		//cout << order[zad1];
+		if (zad1 > zad)
+			order.erase(order.begin() + zad1 + 1);
+
+		if (zad1 < zad)
+			order.erase(order.begin() + zad1);
+
+
+		c_prim = cmax(macierz, order);
+
+		if (c < c_prim) {
+			P = 1;
+		}
+		else {
+			P = exp((c - c_prim) / T);
+		}
+
+		zmienna = static_cast<double>(rand() % 10000) / 10000;
+		//cout << zmienna<<" ";
+		if (P >= zmienna) {
+			T = u * T;
+		}
+		else {
+			//swap(order[zad], order[zad1]);
+			order.insert(order.begin() + zad1, order[zad]);
+			if (zad1 > zad)
+				order.erase(order.begin() + zad + 1);
+
+			if (zad1 < zad)
+				order.erase(order.begin() + zad);
+			T = u * T;
+		}
+		//cout << T << " ";
+	}
+}
+void wyzarzanie_prawdopodobienstwo(vector<vector<Task>> macierz, vector<int> & order) {
+	double T = 1000000000;
+	double Tk = 0.0001;
+	int zad = 0;
+	int zad1 = 0;
+	int c = 0;
+	int c_prim = 0;
+	double P = 0;
+	double u = 0.75;
+	double zmienna;
+	srand(time(NULL));
+
+	while (T > Tk) {
+		zad = rand() % order.size();
+		zad1 = rand() % order.size();
+		//cout << zad1;
+
+		while (zad == zad1)
+		{
+			zad = rand() % order.size();
+			zad1 = rand() % order.size();
+		}
+
+		c = cmax(macierz, order);
+		swap(order[zad], order[zad1]);
+		c_prim = cmax(macierz, order);
+
+		//pominiecie warunku gdy prawdopodobienstwo rowne jest 1
+		if (c > c_prim) P = exp((c - c_prim) / T);
+
+		zmienna = static_cast<double>(rand() % 10000) / 10000;
+		// cout << zmienna<<" ";
+		if (P >= zmienna) {
+			T = u * T;
+		}
+		else {
+			swap(order[zad], order[zad1]);
+			T = u * T;
+		}
+		//cout << T << " ";
+	}
+}
+//modyfikacja do badania zależnosci miedzy doborem temp startowej  i koncowej i mozliwosc zmiany wspolczynnika u
+void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order, double u, double Tk, int T) {
+	//double T = 1000000000;
+	int zad = 0;
+	int zad1 = 0;
+	int c = 0;
+	int c_prim = 0;
+	double P = 0;
+	//double u = 0.75;
+	double zmienna;
+	srand(time(NULL));
+
+	while (T > Tk) {
+		zad = rand() % order.size();
+		zad1 = rand() % order.size();
+		//cout << zad1;
+
+		while (zad == zad1)
+		{
+			zad = rand() % order.size();
+			zad1 = rand() % order.size();
+		}
+
+		c = cmax(macierz, order);
+		swap(order[zad], order[zad1]);
+		c_prim = cmax(macierz, order);
+
+		if (c < c_prim) {
+			P = 1;
+		}
+		else {
+			P = exp((c - c_prim) / T);
+		}
+
+		zmienna = static_cast<double>(rand() % 10000) / 10000;
+		//cout << zmienna<<" ";
+		if (P >= zmienna) {
+			T = u * T;
+		}
+		else {
+			swap(order[zad], order[zad1]);
+			T = u * T;
+		}
+		//cout << T << " ";
+	}
+}
+
 
 
 int main()
 {
+	for (int iter = 0; iter < 3; iter++) {
+		chrono::time_point< std::chrono::system_clock> start = std::chrono::system_clock::now();
+		int number_of_ex, n_m;
 
-	chrono::time_point< std::chrono::system_clock> start = std::chrono::system_clock::now();
-	int number_of_ex, n_m;
-	vector<vector<Task>> macierz = read_data(number_of_ex, n_m);
-	/*vector<int> sum_time(number_of_ex);  //suma czasow wykonania danego zadania przez wszystkie maszyny
-	for (int j = 0; j < number_of_ex; j++) {
-		for (int i = 0; i < n_m; i++) {
-			sum_time[j] += macierz[j][i].time;
+		vector<vector<Task>> macierz = read_data(number_of_ex, n_m);
+		/*	vector<int> sum_time(number_of_ex);  //suma czasow wykonania danego zadania przez wszystkie maszyny
+			for (int j = 0; j < number_of_ex; j++) {
+				for (int i = 0; i < n_m; i++) {
+					sum_time[j] += macierz[j][i].time;
+				}
+				//cout << "time: " << sum_time[j] << endl;
+			}
+		*/
+
+		vector<int> order;
+		for (int i = 0; i < number_of_ex; i++) {
+			order.push_back(i + 1);
 		}
-		//cout << "time: " << sum_time[j] << endl;
-	}
-	*/
-	vector<int> order;
-	for (int i = 0; i < number_of_ex; i++) {
-		order.push_back(i + 1);
-	}
-	
-	//vector<int> order;
-	//vector<int> order = sort(sum_time);
- //for (int i = 0; i < order.size(); i++)
-	//cout << "czas od max do min = " << order[i] << endl;
-	vector<int> order1 = { 3,1,2 };
-	//for (int i = 0; i < number_of_ex; i++) cout << "kolejnosc: " << order[i] << " " << endl;
-   // graf_cmax(macierz, order1);
-	//graf_sort(macierz, order);
-	//dodanie_zadania(macierz, order1);
-	//vector<int> order_naj = sort_cmax(macierz, order);
-   // for(int i=0;i<order_naj.size();i++)
-	//cout << "order_naj = " << order_naj[i] << endl;
-	//print_matrix_time(macierz);
 
-	wyzarzanie(macierz,order);
-    cout << cmax(macierz, order) << endl;
-	cout << "kolejnosc: " << endl; 
-	for (int i = 0; i < number_of_ex; i++) cout << order[i] << " "; 
-	cout << endl; 
-	//print_matrix_time(new_macierz);
-	chrono::time_point< std::chrono::system_clock> end = std::chrono::system_clock::now();
-	chrono::duration<double> elapsed_seconds = end - start;
-	cout << "czas trwania: " << elapsed_seconds.count() << "s\n";
+
+		//vector<int> order;
+		//vector<int> order = sort(sum_time);
+	 //for (int i = 0; i < order.size(); i++)
+		//cout << "czas od max do min = " << order[i] << endl;
+		vector<int> order1 = { 3,1,2 };
+		//for (int i = 0; i < number_of_ex; i++) cout << "kolejnosc: " << order[i] << " " << endl;
+	   // graf_cmax(macierz, order1);
+		//graf_sort(macierz, order);
+		//dodanie_zadania(macierz, order1);
+		//vector<int> order_naj = sort_cmax(macierz, order);
+	   // for(int i=0;i<order_naj.size();i++)
+		//cout << "order_naj = " << order_naj[i] << endl;
+		//print_matrix_time(macierz);
+
+		wyzarzanie(macierz, order, 0.75, 1, 10);
+		cout << cmax(macierz, order) << endl;
+		cout << "kolejnosc: " << endl;
+		for (int i = 0; i < number_of_ex; i++) cout << order[i] << " ";
+		cout << endl;
+		//print_matrix_time(new_macierz);
+		chrono::time_point< std::chrono::system_clock> end = std::chrono::system_clock::now();
+		chrono::duration<double> elapsed_seconds = end - start;
+		cout << "czas trwania: " << elapsed_seconds.count() << "s\n";
+
+	}
+
 	system("pause");
 	return 0;
 }
