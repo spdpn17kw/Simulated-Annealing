@@ -152,6 +152,7 @@ vector<int> sort_cmax(vector<vector<Task>> macierz, vector<int> order) {
 	return order_pom;
 }
 
+//modyfikazja pomijajaca rowne sobie cmaxy 
 void wyzarzanie_cmax_rozne(vector<vector<Task>> macierz, vector<int> & order) {
 	double T = 1000000000;
 	double Tk = 0.0001;
@@ -198,7 +199,6 @@ void wyzarzanie_cmax_rozne(vector<vector<Task>> macierz, vector<int> & order) {
 		//cout << T << " ";
 	}
 }
-
 //modyfikacja uwzgledniajaca zapamietanie najlepszego  rozwiazania 
 void wyzarzanie_mod(vector<vector<Task>> macierz, vector<int> & order) {
 	double T = 1000000000;
@@ -254,8 +254,6 @@ void wyzarzanie_mod(vector<vector<Task>> macierz, vector<int> & order) {
 	}
 	order = betterSolution; 
 }
-
-
 //modyfikacja do badania wspólczynnika u 
 void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order, double u) {
 	double T = 1000000000;
@@ -303,9 +301,7 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order, double u) {
 		//cout << T << " ";
 	}
 }
-
-
-
+//zwykly algorytm
 void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
 	double T=1000000000;
 	int zad = 0;
@@ -351,8 +347,7 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order) {
 		//cout << T << " ";
 	}
 }
-
-
+//modyfikacja z insert zamiast swap
 void wyzarzanie_insert(vector<vector<Task>> macierz, vector<int> & order) {
 	double T = 1000000000;
 	int zad = 0;
@@ -413,6 +408,7 @@ void wyzarzanie_insert(vector<vector<Task>> macierz, vector<int> & order) {
 		//cout << T << " ";
 	}
 }
+//modyfikcja dotyczac apominiecie prwopodobientwa 
 void wyzarzanie_prawdopodobienstwo(vector<vector<Task>> macierz, vector<int> & order) {
 	double T = 1000000000;
 	double Tk = 0.0001;
@@ -501,7 +497,6 @@ void wyzarzanie(vector<vector<Task>> macierz, vector<int> & order, double u, dou
 		//cout << T << " ";
 	}
 }
-
 
 
 int main()
